@@ -46,17 +46,20 @@ def printCaveWithAir(y, xs):
 
 def addSand(x, y):
 	while True:
-		if y+1>y_max:
-			return(False)
-		if (x, y+1) not in cave: #down
+		for i in range(-1, 3):cave[x+i, y_max+2] = "#"
+		if ((x, y+1) not in cave) and y<=y_max+2: #down
 			y+=1
 		elif (x-1, y+1) not in cave: #down left
 			x-=1
-			y+=1
+			if y<=y_max+2: y+=1
 		elif (x+1, y+1) not in cave: #down right
 			x+=1
-			y+=1
-		else:
+			if y<=y_max+2: y+=1
+		elif (x,y) == (500,0): #if sand source blocked :end
+			cave[500,0] = "o"
+			print("sand source blocked!")
+			return(False)
+		else: #else: add sand
 			cave[x,y] = "o"
 			return(True)
 
@@ -76,5 +79,7 @@ print("adding sand...\n")
 
 while addSand(500,0) == True:
 	sand_count+=1
-print("all sand now fall into the void")
+sand_count+=1 #incrementing once because while loop ended but last unit of sand fell
 print("\nSand count :",sand_count)
+#alternate sand unit counting methode : 
+print("Sand count bis:", list(cave.values()).count("o"))
